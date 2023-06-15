@@ -26,4 +26,4 @@ class deck():
             with open(file, 'r') as openfile:
                 # Reading the character from a json file
                 magnus_json = json.load(openfile)
-            self.cards.append(magnus(magnus_json["numbers"], magnus_json["element"], magnus_json["char_class"], magnus_json["ATK"], magnus_json["DEF"], magnus_json["condition"], magnus_json["combo"], magnus_json["effect"]))
+            self.cards.append(magnus(numbers=magnus_json["numbers"], name=magnus_json["name"], element=magnus_json["element"], char_class=magnus_json["char_class"], ATK=magnus_json["ATK"], DEF=magnus_json["DEF"], condition=magnus_json["condition"], combo=magnus_json["combo"], effect=magnus_json["effect"]))
