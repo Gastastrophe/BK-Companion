@@ -36,6 +36,11 @@ def draw_card(hand, battle_deck, card_frames, message_frame):
     hand.append(battle_deck.cards.pop(0))
     update_hand(hand, battle_deck, card_frames, message_frame)
 
+# Reset the combo counter and display the damage report
+def end_turn(message_frame):
+    combo_counter = message_frame.nametowidget("comboCounter")
+    combo_counter.config(text = combo_counter.cget("text")[:-1] + str(0))
+
 # Creates a GUI for battle
 def start_battle(player):
     # Create a graphic interface
@@ -46,6 +51,9 @@ def start_battle(player):
     # Create a combo counter
     combo_counter = tk.Label(master=message_frame, text="Combo: 0", name="comboCounter")
     combo_counter.place(rely=0, relx=1.0, x=0, y=0, anchor="ne")
+    # Create an end turn button
+    turn_ender = tk.Button(master=message_frame, text="End Turn", name="endTurn", command = lambda: end_turn(message_frame))
+    turn_ender.place(rely=0, relx=0, x=0, y=0, anchor="nw")
     # Assign the lower half for cards
     card_zone = tk.Frame(master=window, width=100*8, height=100)
     card_zone.pack(fill=tk.BOTH, side=tk.TOP, expand=True)
