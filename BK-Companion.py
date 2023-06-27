@@ -1,25 +1,42 @@
 import tkinter as tk
 import os
 import random
-
+from functools import partial
 from character import character
-from magnus import deck, magnus
+from magnus import deck
+
+# Shuffle a spent deck
+def get_new_deck(hand, battle_deck, card_frames):
+    # Get a new deck
+    battle_deck.cards = deck().cards
+    # Draw cards equal to hand size
+    hand = []
+    for _ in range(player.hand_size):
+        draw_card(hand, battle_deck, card_frames)
+
+# Plays a card from your hand
+def play_card(i, hand, battle_deck, card_frames):
+    hand.pop(i)
+    draw_card(hand, battle_deck, card_frames)
 
 # Add cards from hand to card frames
-def update_hand(hand, card_frames):
+def update_hand(hand, battle_deck, card_frames):
     for i, card in enumerate(hand):
         for widget in card_frames[i].winfo_children():
             widget.destroy()
-        label = tk.Label(master = card_frames[i], text=card["name"])
+        label = tk.Button(master = card_frames[i], text=card["name"], command = partial(play_card, i, hand, battle_deck, card_frames))
+        # Pack the button into the hand region
         label.pack()
 
 # Draws a card from a deck
 def draw_card(hand, battle_deck, card_frames):
-    hand.append(battle_deck.pop(0))
-    update_hand(hand, card_frames)
+    hand.append(battle_deck.cards.pop(0))
+    update_hand(hand, battle_deck, card_frames)
+
+
 
 # Creates a GUI for battle
-def start_battle(player, cards):
+def start_battle(player):
     # Create a graphic interface
     window = tk.Tk()
     # Create an upper slot for other mesages
@@ -34,9 +51,9 @@ def start_battle(player, cards):
         frame = tk.Frame(master=card_zone, width=100, height=100, relief=tk.RIDGE)
         frame.pack(fill=tk.BOTH, side=tk.LEFT, expand=True)
         card_frames.append(frame)
-    # Set up temporary deck
-    battle_deck = cards.cards.copy()
-    random.shuffle(battle_deck)
+    # Set up a deck
+    battle_deck = deck()
+    random.shuffle(battle_deck.cards)
     # Draw cards equal to hand size
     hand = []
     for _ in range(player.hand_size):
@@ -61,10 +78,6 @@ else:
     else:
         exit()
 
-###### Load the cards in the deck ######
-
-player_deck = deck()
-
 ###### Open combat window ######
 
-start_battle(player=player, cards=player_deck)
+start_battle(player=player)
