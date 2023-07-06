@@ -14,6 +14,8 @@ def get_new_deck(hand, battle_deck, card_frames, message_frame):
     hand = []
     for _ in range(player.hand_size):
         draw_card(hand, battle_deck, card_frames, message_frame)
+    # Update hand frame
+    update_hand(hand, battle_deck, card_frames, message_frame)
 
 # Plays a card from your hand
 def play_card(i, hand, battle_deck, card_frames, message_frame):
@@ -37,13 +39,19 @@ def update_hand(hand, battle_deck, card_frames, message_frame):
 
 # Draws a card from a deck
 def draw_card(hand, battle_deck, card_frames, message_frame):
-    # Draw a card
-    hand.append(battle_deck.cards.pop(0))
-    # Update deck size
-    deck_size = message_frame.nametowidget("deckSize")
-    deck_size.config(text = deck_size.cget("text")[:6] + str(len(battle_deck.cards)))
-    # Update hand visuals
-    update_hand(hand, battle_deck, card_frames, message_frame)
+    # If the deck is empty, tell the user to reshuffle
+    if len(battle_deck.cards) == 0:
+        deck_size = message_frame.nametowidget("deckSize")
+        deck_size.config(text = deck_size.cget("text")[:6] + "Please shuffle the deck")
+    # Otherwise, draw a card
+    else:
+        # Draw a card
+        hand.append(battle_deck.cards.pop(0))
+        # Update deck size
+        deck_size = message_frame.nametowidget("deckSize")
+        deck_size.config(text = deck_size.cget("text")[:6] + str(len(battle_deck.cards)))
+        # Update hand visuals
+        update_hand(hand, battle_deck, card_frames, message_frame)
 
 # Reset the combo counter and display the damage report
 def end_turn(message_frame):
@@ -78,6 +86,9 @@ def start_battle(player):
     # Create a deck size label
     combo_counter = tk.Label(master=message_frame, text="Deck: " + str(len(battle_deck.cards)), name="deckSize")
     combo_counter.place(rely=1.0, relx=1.0, x=0, y=0, anchor="se")
+    # Create a shuffle deck button
+    deck_resetter = tk.Button(master=message_frame, text="Shuffle Deck", name="shuffleDeck", command = lambda: get_new_deck(hand, battle_deck, card_frames, message_frame))
+    deck_resetter.place(rely=1.0, relx=0, x=0, y=0, anchor="sw")
     # Draw cards equal to hand size
     hand = []
     for _ in range(player.hand_size):
