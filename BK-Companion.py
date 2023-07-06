@@ -17,14 +17,18 @@ def get_new_deck(hand, battle_deck, card_frames, message_frame):
 
 # Plays a card from your hand
 def play_card(i, hand, battle_deck, card_frames, message_frame):
+    # Add 1 to the combo counter
     combo_counter = message_frame.nametowidget("comboCounter")
     combo_counter.config(text = combo_counter.cget("text")[:-1] + str(int(combo_counter.cget("text")[-1]) + 1))
+    # Remove the played card from the hand
     hand.pop(i)
+    # Draw a new card
     draw_card(hand, battle_deck, card_frames, message_frame)
 
 # Add cards from hand to card frames
 def update_hand(hand, battle_deck, card_frames, message_frame):
     for i, card in enumerate(hand):
+        # Remove all existing card widgets and create new ones for the updated hand
         for widget in card_frames[i].winfo_children():
             widget.destroy()
         label = tk.Button(master = card_frames[i], text=card["name"], command = partial(play_card, i, hand, battle_deck, card_frames, message_frame))
@@ -33,7 +37,12 @@ def update_hand(hand, battle_deck, card_frames, message_frame):
 
 # Draws a card from a deck
 def draw_card(hand, battle_deck, card_frames, message_frame):
+    # Draw a card
     hand.append(battle_deck.cards.pop(0))
+    # Update deck size
+    deck_size = message_frame.nametowidget("deckSize")
+    deck_size.config(text = deck_size.cget("text")[:6] + str(len(battle_deck.cards)))
+    # Update hand visuals
     update_hand(hand, battle_deck, card_frames, message_frame)
 
 # Reset the combo counter and display the damage report
@@ -66,6 +75,9 @@ def start_battle(player):
     # Set up a deck
     battle_deck = deck()
     random.shuffle(battle_deck.cards)
+    # Create a deck size label
+    combo_counter = tk.Label(master=message_frame, text="Deck: " + str(len(battle_deck.cards)), name="deckSize")
+    combo_counter.place(rely=1.0, relx=1.0, x=0, y=0, anchor="se")
     # Draw cards equal to hand size
     hand = []
     for _ in range(player.hand_size):
