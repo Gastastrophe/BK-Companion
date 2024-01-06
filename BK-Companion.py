@@ -23,7 +23,32 @@ def play_card(i, hand, battle_deck, card_frames, message_frame):
     combo_counter = message_frame.nametowidget("comboCounter")
     combo_counter.config(text = combo_counter.cget("text")[:-1] + str(int(combo_counter.cget("text")[-1]) + 1))
     # Remove the played card from the hand
-    hand.pop(i)
+    played_card = hand.pop(i)
+    text = ""
+    # Display spirit numbers
+    text += "Spirit: "
+    for num in played_card["numbers"]:
+        text += str(num)
+    text += "\n"
+    # Display card name
+    text += "Name: " + played_card["name"] + "\n"
+    # Display element
+    text += "Element: " +  played_card["element"] + "\n"
+    # Display card combo number
+    text += "Combo: " + str(played_card["combo"]) + "\n"
+    # Display ATK if the Magnus has it
+    if not played_card["ATK"] is None:
+        text += "ATK: " +  str(played_card["ATK"]) + "\n"
+    # Display DEF if the Magnus has it
+    if not played_card["DEF"] is None:
+        text += "DEF: " +  str(played_card["DEF"]) + "\n"
+    # Display condition if the Magnus has it
+    if not played_card["condition"] is None:
+        text += "Condition: " +  played_card["condition"] + "\n"
+    # Display card effect
+    text += "Effect: " + played_card["effect"] + "\n"
+    # Put the text from the played card into the display field
+    message_frame.nametowidget("cardDetails").config(text = text)
     # Draw a new card
     draw_card(hand, battle_deck, card_frames, message_frame)
 
@@ -71,6 +96,9 @@ def start_battle(player):
     # Create an end turn button
     turn_ender = tk.Button(master=message_frame, text="End Turn", name="endTurn", command = lambda: end_turn(message_frame))
     turn_ender.place(rely=0, relx=0, x=0, y=0, anchor="nw")
+    # Create an area to display card effects
+    card_details = tk.Label(master=message_frame, text = "", name = "cardDetails")
+    card_details.place(relx=0.5, rely=0.5, anchor="center")
     # Assign the lower half for cards
     card_zone = tk.Frame(master=window, width=100*8, height=100)
     card_zone.pack(fill=tk.BOTH, side=tk.TOP, expand=True)
