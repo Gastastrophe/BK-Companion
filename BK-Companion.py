@@ -17,13 +17,8 @@ def get_new_deck(hand, battle_deck, card_frames, message_frame):
     # Update hand frame
     update_hand(hand, battle_deck, card_frames, message_frame)
 
-# Plays a card from your hand
-def play_card(i, hand, battle_deck, card_frames, message_frame):
-    # Add 1 to the combo counter
-    combo_counter = message_frame.nametowidget("comboCounter")
-    combo_counter.config(text = combo_counter.cget("text")[:-1] + str(int(combo_counter.cget("text")[-1]) + 1))
-    # Remove the played card from the hand
-    played_card = hand.pop(i)
+# Displays a card in the center
+def display_card(played_card, message_frame):
     text = ""
     # Display spirit numbers
     text += "Spirit: "
@@ -49,6 +44,14 @@ def play_card(i, hand, battle_deck, card_frames, message_frame):
     text += "Effect: " + played_card["effect"] + "\n"
     # Put the text from the played card into the display field
     message_frame.nametowidget("cardDetails").config(text = text)
+
+# Plays a card from your hand
+def play_card(i, hand, battle_deck, card_frames, message_frame):
+    # Add 1 to the combo counter
+    combo_counter = message_frame.nametowidget("comboCounter")
+    combo_counter.config(text = combo_counter.cget("text")[:-1] + str(int(combo_counter.cget("text")[-1]) + 1))
+    # Remove the played card from the hand and display it
+    display_card(hand.pop(i), message_frame)
     # Draw a new card
     draw_card(hand, battle_deck, card_frames, message_frame)
 
@@ -58,9 +61,13 @@ def update_hand(hand, battle_deck, card_frames, message_frame):
         # Remove all existing card widgets and create new ones for the updated hand
         for widget in card_frames[i].winfo_children():
             widget.destroy()
-        label = tk.Button(master = card_frames[i], text=card["name"], command = partial(play_card, i, hand, battle_deck, card_frames, message_frame))
-        # Pack the button into the hand region
-        label.pack()
+        # Make a name label, a display button and a play button
+        card_name  = tk.Label(master=card_frames[i], text=card["name"], name="cardName" + str(i))
+        card_name.pack()
+        play_button = tk.Button(master = card_frames[i], text="Play", command = partial(play_card, i, hand, battle_deck, card_frames, message_frame))
+        play_button.pack()
+        display_button = tk.Button(master = card_frames[i], text="Show", command = partial(display_card, card, message_frame))
+        display_button.pack()
 
 # Draws a card from a deck
 def draw_card(hand, battle_deck, card_frames, message_frame):
