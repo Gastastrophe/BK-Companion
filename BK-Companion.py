@@ -57,10 +57,11 @@ def play_card(i, hand, battle_deck, card_frames, message_frame):
 
 # Add cards from hand to card frames
 def update_hand(hand, battle_deck, card_frames, message_frame):
-    for i, card in enumerate(hand):
-        # Remove all existing card widgets and create new ones for the updated hand
+    # Remove all existing card widgets and create new ones for the updated hand
+    for i in range(len(card_frames)):
         for widget in card_frames[i].winfo_children():
             widget.destroy()
+    for i, card in enumerate(hand):
         # Make a name label, a display button and a play button
         card_name  = tk.Label(master=card_frames[i], text=card["name"], name="cardName" + str(i))
         card_name.pack()
@@ -75,6 +76,8 @@ def draw_card(hand, battle_deck, card_frames, message_frame):
     if len(battle_deck.cards) == 0:
         deck_size = message_frame.nametowidget("deckSize")
         deck_size.config(text = deck_size.cget("text")[:6] + "Please shuffle the deck")
+        # Update hand visuals
+        update_hand(hand, battle_deck, card_frames, message_frame)
     # Otherwise, draw a card
     else:
         # Draw a card
