@@ -91,7 +91,7 @@ def draw_card(hand, battle_deck, card_frames, message_frame):
 # Reset the combo counter and display the damage report
 def end_turn(message_frame):
     combo_counter = message_frame.nametowidget("comboCounter")
-    combo_counter.config(text = combo_counter.cget("text")[:-1] + str(0))
+    combo_counter.config(text = combo_counter.cget("text").split(": ")[0] + ": " + str(0))
 
 # Creates a GUI for battle
 def start_battle(player):
