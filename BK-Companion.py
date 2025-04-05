@@ -21,9 +21,9 @@ def get_new_deck(hand, battle_deck, card_frames, message_frame, played_cards):
 def display_card(played_card, message_frame):
     text = ""
     # Display spirit numbers
-    text += "Spirit: "
+    text += "Spirit:"
     for num in played_card["numbers"]:
-        text += str(num)
+        text += " " + str(num)
     text += "\n"
     # Display card name
     text += "Name: " + played_card["name"] + "\n"
@@ -31,12 +31,38 @@ def display_card(played_card, message_frame):
     text += "Element: " +  played_card["element"] + "\n"
     # Display card combo number
     text += "Combo: " + str(played_card["combo"]) + "\n"
-    # Display ATK if the Magnus has it
-    if not played_card["ATK"] is None:
-        text += "ATK: " +  str(played_card["ATK"]) + "\n"
-    # Display DEF if the Magnus has it
-    if not played_card["DEF"] is None:
-        text += "DEF: " +  str(played_card["DEF"]) + "\n"
+    # Display ATK, DEF, and HEAL if the Magnus has it
+    if played_card["PHYS_ATK"] < 0:
+        text += "HEALING: " +  str(-1 * played_card["PHYS_ATK"]) + "\n"
+    if played_card["PHYS_ATK"] > 0:
+        text += "PHYSICAL ATK: " +  str(played_card["PHYS_ATK"]) + "\n"
+    if played_card["PHYS_DEF"] > 0:
+        text += "PHYSICAL DEF: " +  str(played_card["PHYS_DEF"]) + "\n"
+    if played_card["FIRE_ATK"] > 0:
+        text += "FIRE ATK: " +  str(played_card["FIRE_ATK"]) + "\n"
+    if played_card["FIRE_DEF"] > 0:
+        text += "FIRE DEF: " +  str(played_card["FIRE_DEF"]) + "\n"
+    if played_card["WATER_ATK"] > 0:
+        text += "WATER ATK: " +  str(played_card["WATER_ATK"]) + "\n"
+    if played_card["WATER_DEF"] > 0:
+        text += "WATER DEF: " +  str(played_card["WATER_DEF"]) + "\n"
+    if played_card["LIGHT_ATK"] > 0:
+        text += "LIGHT ATK: " +  str(played_card["LIGHT_ATK"]) + "\n"
+    if played_card["LIGHT_DEF"] > 0:
+        text += "LIGHT DEF: " +  str(played_card["LIGHT_DEF"]) + "\n"
+    if played_card["DARK_ATK"] > 0:
+        text += "DARK ATK: " +  str(played_card["DARK_ATK"]) + "\n"
+    if played_card["DARK_DEF"] > 0:
+        text += "DARK DEF: " +  str(played_card["DARK_DEF"]) + "\n"
+    if played_card["WIND_ATK"] > 0:
+        text += "WIND ATK: " +  str(played_card["WIND_ATK"]) + "\n"
+    if played_card["WIND_DEF"] > 0:
+        text += "WIND DEF: " +  str(played_card["WIND_DEF"]) + "\n"
+    if played_card["TIME_ATK"] > 0:
+        text += "TIME ATK: " +  str(played_card["TIME_ATK"]) + "\n"
+    if played_card["TIME_DEF"] > 0:
+        text += "TIME DEF: " +  str(played_card["TIME_DEF"]) + "\n"
+
     # Display condition if the Magnus has it
     if not played_card["condition"] is None:
         text += "Condition: " +  played_card["condition"] + "\n"
