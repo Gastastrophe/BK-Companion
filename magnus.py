@@ -16,13 +16,14 @@ SOME Magnus have:
 - a condition to apply to the target
 """
 class magnus(dict):
-    def __init__(self, numbers, name="default name", element="Physical", char_class="General", PHYS_ATK=0, PHYS_DEF=0, FIRE_ATK=0, FIRE_DEF=0, WATER_ATK=0, WATER_DEF=0, LIGHT_ATK=0, LIGHT_DEF=0, DARK_ATK=0, DARK_DEF=0, WIND_ATK=0, WIND_DEF=0, TIME_ATK=0, TIME_DEF=0, condition=None, combo=1, effect="default description"):
+    def __init__(self, numbers, name="default name", element="Physical", char_class="General", PHYS_ATK=0, HEAL=0, PHYS_DEF=0, FIRE_ATK=0, FIRE_DEF=0, WATER_ATK=0, WATER_DEF=0, LIGHT_ATK=0, LIGHT_DEF=0, DARK_ATK=0, DARK_DEF=0, WIND_ATK=0, WIND_DEF=0, TIME_ATK=0, TIME_DEF=0, condition=None, combo=1, effect="default description"):
             dict.__init__(self, 
                           numbers=numbers, 
                           name=name, 
                           element=element, 
                           char_class=char_class, 
                           PHYS_ATK=PHYS_ATK, 
+                          HEAL=HEAL,
                           PHYS_DEF=PHYS_DEF, 
                           FIRE_ATK=FIRE_ATK, 
                           FIRE_DEF=FIRE_DEF, 
@@ -52,6 +53,7 @@ class deck():
                                         element=magnus_json["element"], 
                                         char_class=magnus_json["char_class"], 
                                         PHYS_ATK=magnus_json["PHYS_ATK"], 
+                                        HEAL=magnus_json["HEAL"],
                                         PHYS_DEF=magnus_json["PHYS_DEF"], 
                                         FIRE_ATK=magnus_json["FIRE_ATK"], 
                                         FIRE_DEF=magnus_json["FIRE_DEF"], 

@@ -32,8 +32,8 @@ def display_card(played_card, message_frame):
     # Display card combo number
     text += "Combo: " + str(played_card["combo"]) + "\n"
     # Display ATK, DEF, and HEAL if the Magnus has it
-    if played_card["PHYS_ATK"] < 0:
-        text += "HEALING: " +  str(-1 * played_card["PHYS_ATK"]) + "\n"
+    if played_card["HEAL"] > 0:
+        text += "HEALING: " +  str(played_card["HEAL"]) + "\n"
     if played_card["PHYS_ATK"] > 0:
         text += "PHYSICAL ATK: " +  str(played_card["PHYS_ATK"]) + "\n"
     if played_card["PHYS_DEF"] > 0:
@@ -118,13 +118,84 @@ def draw_card(hand, battle_deck, card_frames, message_frame, played_cards):
         # Update hand visuals
         update_hand(hand, battle_deck, card_frames, message_frame, played_cards)
 
+# Returns a-b while showing subtraction if it occured
+# Assumes a>b, 
+def calc_ab(a,b):
+    if b > 0:
+        return str(a - b) + " (" + str(a) + " - " + str(b) + ")\n"
+    else:
+        return str(a - b) + "\n"
+
 # Reset the combo counter and display the damage report
 def end_turn(message_frame, played_cards):
     # Reset combo counter
     combo_counter = message_frame.nametowidget("comboCounter")
     combo_counter.config(text = combo_counter.cget("text").split(": ")[0] + ": " + str(0))
+    # Display damage totals
+    text = ""
+    heal = 0
+    phys_atk = 0
+    fire_atk = 0
+    water_atk = 0
+    light_atk = 0
+    dark_atk = 0
+    wind_atk = 0
+    time_atk = 0
+    phys_def = 0
+    fire_def = 0
+    water_def = 0
+    light_def = 0
+    dark_def = 0
+    wind_def = 0
+    time_def = 0
+    for card in played_cards:
+        heal += card["HEAL"]
+        phys_atk += card["PHYS_ATK"]
+        phys_def += card["PHYS_DEF"]
+        fire_atk += card["FIRE_ATK"]
+        fire_def += card["FIRE_DEF"]
+        water_atk += card["WATER_ATK"]
+        water_def += card["WATER_DEF"]
+        light_atk += card["LIGHT_ATK"]
+        light_def += card["LIGHT_DEF"]
+        dark_atk += card["DARK_ATK"]
+        dark_def += card["DARK_DEF"]
+        wind_atk += card["WIND_ATK"]
+        wind_def += card["WIND_DEF"]
+        time_atk += card["TIME_ATK"]
+        time_def += card["TIME_DEF"]
+    if phys_atk >= heal:
+        text += "Physical Attack: " + calc_ab(phys_atk, heal)
+    else:
+        text += "Heal: " + calc_ab(heal, phys_atk)
+    text += "Physical Defense: " + str(phys_def) + "\n"
+    if water_atk >= fire_atk:
+        text += "Water Attack: " + calc_ab(water_atk, fire_atk)
+    else:
+        text += "Fire Attack: " + calc_ab(fire_atk, water_atk)
+    if light_atk >= dark_atk:
+        text += "Light Attack: " + calc_ab(light_atk, dark_atk)
+    else:
+        text += "Dark Attack: " + calc_ab(dark_atk, light_atk)
+    if wind_atk >= time_atk:
+        text += "Wind Attack: " + calc_ab(wind_atk, time_atk)
+    else:
+        text += "Time Attack: " + calc_ab(time_atk, wind_atk)
+    if water_def >= fire_def:
+        text += "Water Defense: " + calc_ab(water_def, fire_def)
+    else:
+        text += "Fire Defense: " + calc_ab(fire_def, water_def)
+    if light_def >= dark_def:
+        text += "Light Defense: " + calc_ab(light_def, dark_def)
+    else:
+        text += "Dark Defense: " + calc_ab(dark_def, light_def)
+    if wind_def >= time_def:
+        text += "Wind Defense: " + calc_ab(wind_def, time_def)
+    else:
+        text += "Time Defense: " + calc_ab(time_def, wind_def)
+    
+    message_frame.nametowidget("cardDetails").config(text = text)
     # Reset played cards
-    print(played_cards)
     played_cards.clear()
 
 # Creates a GUI for battle
